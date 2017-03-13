@@ -1,0 +1,26 @@
+{
+  "name": "sombrero",
+  "version": "1.0.0",
+  "description": "Github integration for featuredeploy",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/resmio/sombrero.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/resmio/sombrero/issues"
+  },
+  "homepage": "https://github.com/resmio/sombrero#readme",
+  "engines": {
+    "node": "6.9.4"
+  },
+  "dependencies": {
+    "@resmio/lollygag": "^0.1.8"
+  }
+}
