@@ -9,8 +9,10 @@ http.createServer(function(req, res) {
     });
     req.on('end', function() {
       var data = JSON.parse(body);
-      console.log(data['action'])
-      console.log(data)
+      console.log(data.action)
+      console.log(data.label.name)
+      console.log(data.pull_request.head.sha)
+      console.log(data.pull_request.head.ref)
     });
 
   res.writeHead(200, {'Content-Type' : 'text/plain'});
