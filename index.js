@@ -10,6 +10,7 @@ http.createServer(function(req, res) {
     });
     req.on('end', function() {
       var data = qs.parse(body);
+      console.log(data.action)
       console.log(data)
     });
 
