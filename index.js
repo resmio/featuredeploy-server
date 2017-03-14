@@ -1,6 +1,9 @@
 var port = process.env.PORT || 3000;
 
 var app = require('express')();
+var myParser = require("body-parser");
+app.use(myParser.urlencoded({extended : true}));
+
 var server = require('http').Server(app);
 server.listen(port);
 
