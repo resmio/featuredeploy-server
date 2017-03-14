@@ -30,4 +30,5 @@ app.post('/pull_request', function (req, res) {
         break
     }
   }
+  res.send(200)
 })
