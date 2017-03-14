@@ -4,7 +4,9 @@ var app = require('express')();
 var server = require('http').Server(app);
 server.listen(port);
 
-app.post('/', function ({body}, res) {
+app.post('/', function (req, res) {
+  var body = req.body
+  console.log(body)
   console.log(body.action)
   console.log(body.label.name)
   console.log(body.pull_request.head.sha)
