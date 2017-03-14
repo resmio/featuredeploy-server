@@ -1,5 +1,4 @@
 var http = require('http');
-var qs = require('querystring');
 
 var port = process.env.PORT || 3000;
 
@@ -9,7 +8,7 @@ http.createServer(function(req, res) {
       body += chunk;
     });
     req.on('end', function() {
-      var data = qs.parse(body);
+      var data = JSON.parse(body);
       console.log(data['action'])
       console.log(data)
     });
