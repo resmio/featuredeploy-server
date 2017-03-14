@@ -5,7 +5,12 @@ var server = require('http').Server(app);
 server.listen(port);
 
 app.post('/', function (req, res) {
-  console.log(req)
+  var data = JSON.parse(req.body);
+  console.log(data.action)
+  console.log(data.label.name)
+  console.log(data.pull_request.head.sha)
+  console.log(data.pull_request.head.ref)
+
 });
 
 //
