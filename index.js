@@ -4,12 +4,11 @@ var app = require('express')();
 var server = require('http').Server(app);
 server.listen(port);
 
-app.post('/', function (req, res) {
-  var data = JSON.parse(req.body);
-  console.log(data.action)
-  console.log(data.label.name)
-  console.log(data.pull_request.head.sha)
-  console.log(data.pull_request.head.ref)
+app.post('/', function ({body}, res) {
+  console.log(body.action)
+  console.log(body.label.name)
+  console.log(body.pull_request.head.sha)
+  console.log(body.pull_request.head.ref)
 
 });
 
