@@ -13,6 +13,7 @@ http.createServer(function(req, res) {
       console.log(data.label.name)
       console.log(data.pull_request.head.sha)
       console.log(data.pull_request.head.ref)
+      body = ''
     });
 
   res.writeHead(200, {'Content-Type' : 'text/plain'});
