@@ -1,7 +1,7 @@
 var port = process.env.PORT || 3000
 var githubBotUserId = process.env.GITHUB_BOT_USER_ID
 var giphyApiKey = process.env.GIPHY_API_KEY
-var cert = fs.readFileSync('./github.pem')
+var cert = process.env.GITHUB_PRIVATE_KEY
 
 var app = require('express')()
 var bodyParser = require('body-parser')
