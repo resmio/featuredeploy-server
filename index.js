@@ -23,7 +23,7 @@ function featuredeploy(args, callback){
       callback(err)
     } else {
       stdout = stdout.trim()
-      ip = stdout.substr(stdout.lastIndexOf("\n") + 1) // last line
+      lastLine = stdout.substr(stdout.lastIndexOf("\n") + 1) // last line
       callback(lastLine)
     }
   })
