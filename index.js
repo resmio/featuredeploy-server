@@ -13,17 +13,17 @@ server.listen(port)
 var lollygag = require('@resmio/lollygag')
 
 app.post('/pull_request', function (req, res) {
-  const {action, pull_request, label} = req.body
+  const {action, pull_request, label, repo} = req.body
   switch (action) {
     case 'labeled':
       if (label.name === 'featuredeploy') {
-        lollygag.makeGithubFeatureDeployComments(1755, 15513, cert, pull_request.head.ref, 'deploying feature...', githubBotUserId, giphyApiKey)
+        lollygag.makeGithubFeatureDeployComments(1755, 15513, cert, repo.full_name, pull_request.head.ref, 'deploying feature...', githubBotUserId, giphyApiKey)
         // RUN THE DEPLOY SCRIPT HERE
       }
       break
     case 'unlabeled':
       if (label.name === 'featuredeploy') {
-        lollygag.makeGithubFeatureDeployComments(1755, 15513, cert, pull_request.head.ref, null, githubBotUserId, giphyApiKey)
+        lollygag.makeGithubFeatureDeployComments(1755, 15513, cert, repo.full_name, pull_request.head.ref, null, githubBotUserId, giphyApiKey)
         // RUN THE DESTROY SCRIPT HERE
       }
       break
