@@ -23,7 +23,10 @@ app.post('/pull_request', function (req, res) {
       break
     case 'unlabeled':
       if (label.name === 'featuredeploy') {
-
+        integrationTools.removeGithubFeatureDeploy({
+          installationId: installation.id,
+          pullUrl: pull_request.url
+        })
       }
       break
   }
