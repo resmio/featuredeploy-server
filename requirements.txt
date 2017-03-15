@@ -1,1 +1,1 @@
-# -e 'git+ssh://git@github.com/resmio/resmio.git@packaged-featuredeploy#egg=featuredeploy&subdirectory=featuredeploy'
+-e 'git+ssh://git@github.com/resmio/resmio.git@packaged-featuredeploy#egg=featuredeploy&subdirectory=featuredeploy'
