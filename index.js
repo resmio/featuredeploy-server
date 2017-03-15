@@ -35,7 +35,7 @@ app.post('/pull_request', function (req, res) {
   switch (action) {
     case 'labeled':
       if (label.name === 'featuredeploy') {
-        featuredeploy(deploy, pull_request.head.ref, pull_request.head.sha)
+        featuredeploy('deploy', pull_request.head.ref, pull_request.head.sha)
         // lollygag.makeGithubFeatureDeployComments(1755, 15513, cert, pull_request.head.ref, 'deploying feature...', githubBotUserId, giphyApiKey)
         // RUN THE DEPLOY SCRIPT HERE
       }
