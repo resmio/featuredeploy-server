@@ -11,7 +11,7 @@ var server = require('http').Server(app)
 server.listen(port)
 
 var lollygag = require('@resmio/lollygag')
-const spawnFile = require('child_process').spawnFile;
+const execFile = require('child_process').execFile;
 
 
 // call the featuredeploy script and passes the last stdout line as argument
@@ -35,7 +35,9 @@ app.post('/pull_request', function (req, res) {
   switch (action) {
     case 'labeled':
       if (label.name === 'featuredeploy') {
-        featuredeploy('deploy', pull_request.head.ref, pull_request.head.sha)
+        featuredeploy(['deploy', pull_request.head.ref, pull_request.head.sha], function(ip){
+          console.log(ip) 
+        })
         // lollygag.makeGithubFeatureDeployComments(1755, 15513, cert, pull_request.head.ref, 'deploying feature...', githubBotUserId, giphyApiKey)
         // RUN THE DEPLOY SCRIPT HERE
       }
