@@ -20,7 +20,6 @@ function featuredeploy(args, callback){
     if (error){
       console.error('Error calling featuredeploy') 
       console.error(error)
-      callback(err)
     } else {
       stdout = stdout.trim()
       lastLine = stdout.substr(stdout.lastIndexOf("\n") + 1) // last line
@@ -35,17 +34,20 @@ app.post('/pull_request', function (req, res) {
   switch (action) {
     case 'labeled':
       if (label.name === 'featuredeploy') {
+        // lollygag.makeGithubFeatureDeployComments(1755, 15513, cert, pull_request.head.ref, 'deploying feature...', githubBotUserId, giphyApiKey)
+        // RUN THE DEPLOY SCRIPT HERE
         featuredeploy(['deploy', pull_request.head.ref, pull_request.head.sha], function(ip){
           console.log(ip) 
         })
-        // lollygag.makeGithubFeatureDeployComments(1755, 15513, cert, pull_request.head.ref, 'deploying feature...', githubBotUserId, giphyApiKey)
-        // RUN THE DEPLOY SCRIPT HERE
       }
       break
     case 'unlabeled':
       if (label.name === 'featuredeploy') {
         // lollygag.makeGithubFeatureDeployComments(1755, 15513, cert, pull_request.head.ref, null, githubBotUserId, giphyApiKey)
         // RUN THE DESTROY SCRIPT HERE
+        featuredeploy(['rmbranch', pull_request.head.ref], function(){
+          console.log('rmved')
+        })
       }
       break
   }
