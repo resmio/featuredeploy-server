@@ -13,10 +13,8 @@ const execFile = require('child_process').execFile;
 // call the featuredeploy script and passes the last stdout line as argument
 const featuredeploy = (args, callback) => {
   execFile('featuredeploy', args, (error, stdout, stderr) => {
-    if (error) {
-      console.error('Error calling featuredeploy')
-      console.error(error)
-    } else {
+    if (error) { console.error(error) }
+    else {
       stdout = stdout.trim()
       let lastLine = stdout.substr(stdout.lastIndexOf('\n') + 1) // last line
       callback(lastLine)
@@ -29,23 +27,21 @@ app.post('/pull_request', (req, res) => {
   switch (action) {
     case 'labeled':
       if (label.name === 'featuredeploy') {
-        featuredeploy(['deploy', pull_request.head.ref, pull_request.head.sha], () => {
-          integrationTools.makeGithubFeatureDeployComments({
-            installationId: installation.id,
-            pullUrl: pull_request.url,
-            message: 'building...'
-          })
+        integrationTools.makeGithubFeatureDeployComments({
+          installationId: installation.id,
+          pullUrl: pull_request.url,
+          message: 'building...'
         })
+        featuredeploy(['deploy', pull_request.head.ref, pull_request.head.sha], () => false)
       }
       break
     case 'unlabeled':
       if (label.name === 'featuredeploy') {
-        featuredeploy(['rmbranch', pull_request.head.ref], () => {
-          integrationTools.removeGithubFeatureDeployComments({
-            installationId: installation.id,
-            pullUrl: pull_request.url
-          })
+        integrationTools.removeGithubFeatureDeployComments({
+          installationId: installation.id,
+          pullUrl: pull_request.url
         })
+        featuredeploy(['rmbranch', pull_request.head.ref], () => false)
       }
       break
   }
@@ -60,7 +56,7 @@ app.post('/destroy', (req, res) => {
   integrationTools.removeGithubFeatureDeployComments({
     installationId,
     branchName,
-    fullName: 'heinburger/database-test'
+    fullName
   })
   res.sendStatus(200)
 })
