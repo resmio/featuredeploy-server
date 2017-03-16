@@ -29,7 +29,7 @@ app.post('/pull_request', (req, res) => {
   switch (action) {
     case 'labeled':
       if (label.name === 'featuredeploy') {
-        featuredeploy(['deploy', pull_request.head.ref, pull_request.head.sha], (ip) => {
+        featuredeploy(['deploy', pull_request.head.ref, pull_request.head.sha], () => {
           integrationTools.makeGithubFeatureDeployComments({
             installationId: installation.id,
             pullUrl: pull_request.url,
@@ -54,10 +54,13 @@ app.post('/pull_request', (req, res) => {
 
 app.post('/destroy', (req, res) => {
   const {full_name: fullName, branch: branchName, installation_id: installationId} = req.body
+  console.log(fullName)
+  console.log(branchName)
+  console.log(installationId)
   integrationTools.removeGithubFeatureDeployComments({
     installationId,
     branchName,
-    fullName
+    fullName: 'heinburger/database-test'
   })
   res.sendStatus(200)
 })
