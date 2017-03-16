@@ -57,11 +57,16 @@ app.post('/destroy', (req, res) => {
   const {full_name, branch} = req.body
   integrationTools.removeGithubFeatureDeploy({
     installationId: installation.id,
-    branch,
+    branchName: branch,
     fullName: full_name
   })
 })
 
-bla()
-
-function bla() { console.log('blah works') }
+app.post('/deployed', (req, res) => {
+  const {full_name, branch} = req.body
+  integrationTools.removeGithubFeatureDeploy({
+    installationId: installation.id,
+    branch,
+    fullName: full_name
+  })
+})
