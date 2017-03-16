@@ -21,8 +21,9 @@
     "node": "6.9.4"
   },
   "dependencies": {
-    "@resmio/lollygag": "^0.1.10",
     "body-parser": "^1.17.1",
-    "express": "^4.15.2"
+    "express": "^4.15.2",
+    "jsonwebtoken": "^7.3.0",
+    "request": "^2.81.0"
   }
 }
