@@ -7,7 +7,6 @@ app.use(bodyParser.json())
 var server = require('http').Server(app)
 server.listen(port)
 
-
 var integrationTools = require('./lib/integrationTools')
 
 const execFile = require('child_process').execFile;
@@ -34,7 +33,7 @@ app.post('/pull_request', (req, res) => {
           integrationTools.makeGithubFeatureDeployComments({
             installationId: installation.id,
             pullUrl: pull_request.url,
-            message: 'deploying to ' + ip
+            message: 'building...'
           })
         })
       }
@@ -42,7 +41,7 @@ app.post('/pull_request', (req, res) => {
     case 'unlabeled':
       if (label.name === 'featuredeploy') {
         featuredeploy(['rmbranch', pull_request.head.ref], () => {
-          integrationTools.removeGithubFeatureDeploy({
+          integrationTools.removeGithubFeatureDeployComments({
             installationId: installation.id,
             pullUrl: pull_request.url
           })
@@ -54,9 +53,8 @@ app.post('/pull_request', (req, res) => {
 })
 
 app.post('/destroy', (req, res) => {
-  console.log(req)
   const {full_name: fullName, branch: branchName, installation_id: installationId} = req.body
-  integrationTools.removeGithubFeatureDeploy({
+  integrationTools.removeGithubFeatureDeployComments({
     installationId,
     branchName,
     fullName
@@ -65,11 +63,13 @@ app.post('/destroy', (req, res) => {
 })
 
 app.post('/deployed', (req, res) => {
-  const {full_name: fullName, branch: branchName, installation_id: installationId} = req.body
-  integrationTools.removeGithubFeatureDeploy({
+  const {full_name: fullName, branch: branchName, installation_id: installationId, ip, hash} = req.body
+  integrationTools.makeGithubFeatureDeployComments({
     installationId,
     branchName,
-    fullName
+    fullName,
+    message: 'deployed to http://' + ip + ' ' + hash,
+    giphy: true
   })
   res.sendStatus(200)
 })
