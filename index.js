@@ -54,19 +54,22 @@ app.post('/pull_request', (req, res) => {
 })
 
 app.post('/destroy', (req, res) => {
-  const {full_name, branch} = req.body
+  console.log(req)
+  const {full_name: fullName, branch: branchName, installation_id: installationId} = req.body
   integrationTools.removeGithubFeatureDeploy({
-    installationId: installation.id,
-    branchName: branch,
-    fullName: full_name
+    installationId,
+    branchName,
+    fullName
   })
+  res.sendStatus(200)
 })
 
 app.post('/deployed', (req, res) => {
-  const {full_name, branch} = req.body
+  const {full_name: fullName, branch: branchName, installation_id: installationId} = req.body
   integrationTools.removeGithubFeatureDeploy({
-    installationId: installation.id,
-    branch,
-    fullName: full_name
+    installationId,
+    branchName,
+    fullName
   })
+  res.sendStatus(200)
 })
