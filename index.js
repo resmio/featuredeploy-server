@@ -44,6 +44,19 @@ app.post('/pull_request', (req, res) => {
         featuredeploy(['rmbranch', pull_request.head.ref], () => false)
       }
       break
+    case 'closed':
+      integrationTools.checkForFeatureDeployLabel({
+        installationId: installation.id,
+        labelsUrl: pull_request.issue_url + '/labels'
+      }).then((hasLabel) => {
+        if (hasLabel) {
+          integrationTools.removeGithubFeatureDeployComments({
+            installationId: installation.id,
+            pullUrl: pull_request.url
+          })
+          featuredeploy(['rmbranch', pull_request.head.ref], () => false)
+        }
+      })
   }
   res.sendStatus(200)
 })
