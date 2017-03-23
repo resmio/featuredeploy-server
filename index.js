@@ -24,6 +24,7 @@ const featuredeploy = (args, callback) => {
 
 app.post('/pull_request', (req, res) => {
   const {action, pull_request, label, repo, installation} = req.body
+  console.log(req.body)
   switch (action) {
     case 'labeled':
       if (label.name === 'featuredeploy') {
