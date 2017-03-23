@@ -58,6 +58,7 @@ app.post('/pull_request', (req, res) => {
             featuredeploy(['rmbranch', pull_request.head.ref], () => false)
           }
         })
+        break
     }
   }
   res.sendStatus(200)
