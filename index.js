@@ -58,6 +58,7 @@ app.post('/pull_request', (req, res) => {
               installationId: installation.id,
               pullUrl: pull_request.url
             })
+            featuredeploy(['rmbranch', pull_request.head.ref], () => false)
           }
         })
         break
