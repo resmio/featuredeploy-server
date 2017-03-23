@@ -24,6 +24,7 @@ const featuredeploy = (args, callback) => {
 
 app.post('/pull_request', (req, res) => {
   const {action, pull_request, label, repository, installation} = req.body
+  console.log(req.body)
   if (installation && action && pull_request) { // we only want to concern ourselves with the intallation actions, not the user actions
     switch (action) {
       case 'labeled':
@@ -48,7 +49,7 @@ app.post('/pull_request', (req, res) => {
       case 'closed':
         integrationTools.checkForFeatureDeployLabel({
           installationId: installation.id,
-          labelsUrl: pull_request.issue_url + '/labels'
+          pullUrl: pull_request.url
         }).then((hasLabel) => {
           if (hasLabel) {
             integrationTools.removeGithubFeatureDeployComments({
