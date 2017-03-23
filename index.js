@@ -1,11 +1,12 @@
-var port = process.env.PORT || 3000
+var PORT = process.env.PORT || 3000
+var GITHUB_LABEL_NAME = process.env.GITHUB_LABEL_NAME
 
 var app = require('express')()
 var bodyParser = require('body-parser')
 app.use(bodyParser.json())
 
 var server = require('http').Server(app)
-server.listen(port)
+server.listen(PORT)
 
 var integrationTools = require('./lib/integrationTools')
 
@@ -23,12 +24,13 @@ const featuredeploy = (args, callback) => {
 }
 
 app.post('/pull_request', (req, res) => {
-  const {action, pull_request, label, repository, installation} = req.body
+  const {action, pull_request, label, repository, installation, sender} = req.body
   console.log(req.body)
-  if (installation && action && pull_request) { // we only want to concern ourselves with the intallation actions, not the user actions
+  const nonBotSender = sender && sender.type && sender.type !== 'Bot'
+  if (installation && installation.id && action && pull_request) {
     switch (action) {
       case 'labeled':
-        if (label.name === 'featuredeploy') {
+        if (nonBotSender && label.name === GITHUB_LABEL_NAME) {
           integrationTools.makeGithubFeatureDeployComments({
             installationId: installation.id,
             pullUrl: pull_request.url,
@@ -38,7 +40,7 @@ app.post('/pull_request', (req, res) => {
         }
         break
       case 'unlabeled':
-        if (label.name === 'featuredeploy') {
+        if (nonBotSender && label.name === GITHUB_LABEL_NAME ) {
           integrationTools.removeGithubFeatureDeployComments({
             installationId: installation.id,
             pullUrl: pull_request.url
@@ -56,7 +58,6 @@ app.post('/pull_request', (req, res) => {
               installationId: installation.id,
               pullUrl: pull_request.url
             })
-            featuredeploy(['rmbranch', pull_request.head.ref], () => false)
           }
         })
         break
