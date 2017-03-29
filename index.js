@@ -1,4 +1,5 @@
 var port = process.env.PORT || 3000
+var SECRET = process.env.SECRET
 
 var app = require('express')()
 var bodyParser = require('body-parser')
@@ -23,49 +24,61 @@ const featuredeploy = (args, callback) => {
 }
 
 app.post('/pull_request', (req, res) => {
-  const {action, pull_request, label, repo, installation} = req.body
-  switch (action) {
-    case 'labeled':
-      if (label.name === 'featuredeploy') {
-        integrationTools.makeGithubFeatureDeployComments({
-          installationId: installation.id,
-          pullUrl: pull_request.url,
-          message: 'building...'
-        })
-        featuredeploy(['deploy', pull_request.head.ref, pull_request.head.sha], () => false)
-      }
-      break
-    case 'unlabeled':
-      if (label.name === 'featuredeploy') {
-        integrationTools.removeGithubFeatureDeployComments({
-          installationId: installation.id,
-          pullUrl: pull_request.url
-        })
-        featuredeploy(['rmbranch', pull_request.head.ref], () => false)
-      }
-      break
+  if (req.query.secret === SECRET){
+    const {action, pull_request, label, repo, installation} = req.body
+    switch (action) {
+      case 'labeled':
+        if (label.name === 'featuredeploy') {
+          integrationTools.makeGithubFeatureDeployComments({
+            installationId: installation.id,
+            pullUrl: pull_request.url,
+            message: 'building...'
+          })
+          featuredeploy(['deploy', pull_request.head.ref, pull_request.head.sha], () => false)
+        }
+        break
+      case 'unlabeled':
+        if (label.name === 'featuredeploy') {
+          integrationTools.removeGithubFeatureDeployComments({
+            installationId: installation.id,
+            pullUrl: pull_request.url
+          })
+          featuredeploy(['rmbranch', pull_request.head.ref], () => false)
+        }
+        break
+    }
+    res.sendStatus(200)
+  } else {
+    res.sendStatus(403)
   }
-  res.sendStatus(200)
 })
 
 app.post('/destroy', (req, res) => {
-  const {full_name: fullName, branch: branchName, installation_id: installationId} = req.body
-  integrationTools.removeGithubFeatureDeployComments({
-    installationId,
-    branchName,
-    fullName
-  })
-  res.sendStatus(200)
+  if (req.query.secret === SECRET){
+    const {full_name: fullName, branch: branchName, installation_id: installationId} = req.body
+    integrationTools.removeGithubFeatureDeployComments({
+      installationId,
+      branchName,
+      fullName
+    })
+    res.sendStatus(200)
+  } else {
+    res.sendStatus(403)
+  }
 })
 
 app.post('/deployed', (req, res) => {
-  const {full_name: fullName, branch: branchName, installation_id: installationId, ip, hash} = req.body
-  integrationTools.makeGithubFeatureDeployComments({
-    installationId,
-    branchName,
-    fullName,
-    message: 'deployed to http://' + ip + ' ' + hash,
-    giphy: true
-  })
-  res.sendStatus(200)
+  if (req.query.secret === SECRET){
+    const {full_name: fullName, branch: branchName, installation_id: installationId, ip, hash} = req.body
+    integrationTools.makeGithubFeatureDeployComments({
+      installationId,
+      branchName,
+      fullName,
+      message: 'deployed to http://' + ip + ' ' + hash,
+      giphy: true
+    })
+    res.sendStatus(200)
+  } else {
+    res.sendStatus(403)
+  }
 })
