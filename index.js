@@ -1,4 +1,5 @@
-var port = process.env.PORT || 3000
+var PORT = process.env.PORT || 3000
+var GITHUB_LABEL_NAME = process.env.GITHUB_LABEL_NAME
 var SECRET = process.env.SECRET
 
 var app = require('express')()
@@ -6,7 +7,7 @@ var bodyParser = require('body-parser')
 app.use(bodyParser.json())
 
 var server = require('http').Server(app)
-server.listen(port)
+server.listen(PORT)
 
 var integrationTools = require('./lib/integrationTools')
 
@@ -25,27 +26,45 @@ const featuredeploy = (args, callback) => {
 
 app.post('/pull_request', (req, res) => {
   if (req.query.secret === SECRET){
-    const {action, pull_request, label, repo, installation} = req.body
-    switch (action) {
-      case 'labeled':
-        if (label.name === 'featuredeploy') {
-          integrationTools.makeGithubFeatureDeployComments({
-            installationId: installation.id,
-            pullUrl: pull_request.url,
-            message: 'building...'
-          })
-          featuredeploy(['deploy', pull_request.head.ref, pull_request.head.sha], () => false)
-        }
-        break
-      case 'unlabeled':
-        if (label.name === 'featuredeploy') {
-          integrationTools.removeGithubFeatureDeployComments({
+    const {action, pull_request, label, repository, installation, sender} = req.body
+    console.log(req.body)
+    const nonBotSender = sender && sender.type && sender.type !== 'Bot'
+    if (installation && installation.id && action && pull_request) {
+      switch (action) {
+        case 'labeled':
+          if (nonBotSender && label.name === GITHUB_LABEL_NAME) {
+            integrationTools.makeGithubFeatureDeployComments({
+              installationId: installation.id,
+              pullUrl: pull_request.url,
+              message: 'building...'
+            })
+            featuredeploy(['deploy', pull_request.head.ref, pull_request.head.sha], () => false)
+          }
+          break
+        case 'unlabeled':
+          if (nonBotSender && label.name === GITHUB_LABEL_NAME ) {
+            integrationTools.removeGithubFeatureDeployComments({
+              installationId: installation.id,
+              pullUrl: pull_request.url
+            })
+            featuredeploy(['rmbranch', pull_request.head.ref], () => false)
+          }
+          break
+        case 'closed':
+          integrationTools.checkForFeatureDeployLabel({
             installationId: installation.id,
             pullUrl: pull_request.url
+          }).then((hasLabel) => {
+            if (hasLabel) {
+              integrationTools.removeGithubFeatureDeployComments({
+                installationId: installation.id,
+                pullUrl: pull_request.url
+              })
+              featuredeploy(['rmbranch', pull_request.head.ref], () => false)
+            }
           })
-          featuredeploy(['rmbranch', pull_request.head.ref], () => false)
-        }
-        break
+          break
+      }
     }
     res.sendStatus(200)
   } else {
@@ -77,7 +96,7 @@ app.post('/deployed', (req, res) => {
       message: 'deployed to http://' + ip + ' ' + hash,
       giphy: true
     })
-    res.sendStatus(200)
+  res.sendStatus(200)
   } else {
     res.sendStatus(403)
   }
