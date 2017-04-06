@@ -25,7 +25,7 @@ const featuredeploy = (args, callback) => {
 }
 
 app.post('/pull_request', (req, res) => {
-  if (req.query.secret === SECRET) {
+  if (req.query.secret === SECRET) { // in other endpoint we use POST for the secret
     const {action, pull_request, label, repository, installation, sender} = req.body
     const nonBotSender = sender && sender.type && sender.type !== 'Bot'
     if (installation && installation.id && action && pull_request) {
@@ -72,7 +72,7 @@ app.post('/pull_request', (req, res) => {
 })
 
 app.post('/error', (req, res) => {
-  if (req.query.secret === SECRET) {
+  if (req.body.secret === SECRET) {
     const {full_name: fullName, branch: branchName, installation_id: installationId, ip} = req.body
     integrationTools.makeGithubFeatureDeployComments({
       installationId,
@@ -88,7 +88,7 @@ app.post('/error', (req, res) => {
 })
 
 app.post('/destroy', (req, res) => {
-  if (req.query.secret === SECRET) {
+  if (req.body.secret === SECRET) {
     const {full_name: fullName, branch: branchName, installation_id: installationId} = req.body
     integrationTools.removeGithubFeatureDeployComments({
       installationId,
@@ -102,7 +102,7 @@ app.post('/destroy', (req, res) => {
 })
 
 app.post('/deployed', (req, res) => {
-  if (req.query.secret === SECRET) {
+  if (req.body.secret === SECRET) {
     const {full_name: fullName, branch: branchName, installation_id: installationId, ip, hash} = req.body
     integrationTools.makeGithubFeatureDeployComments({
       installationId,
