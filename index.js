@@ -67,6 +67,17 @@ app.post('/pull_request', (req, res) => {
   res.sendStatus(200)
 })
 
+app.post('/error', (req, res) => {
+  const {full_name: fullName, branch: branchName, installation_id: installationId, ip} = req.body
+  integrationTools.makeGithubFeatureDeployComments({
+    installationId,
+    branchName,
+    fullName,
+    message: 'error happened... check it out here http://' + ip
+  })
+  res.sendStatus(200)
+})
+
 app.post('/destroy', (req, res) => {
   const {full_name: fullName, branch: branchName, installation_id: installationId} = req.body
   integrationTools.removeGithubFeatureDeployComments({
