@@ -33,12 +33,13 @@ app.post('/pull_request', (req, res) => {
       switch (action) {
         case 'labeled':
           if (nonBotSender && label.name === GITHUB_LABEL_NAME) {
-            integrationTools.makeGithubFeatureDeployComments({
-              installationId: installation.id,
-              pullUrl: pull_request.url,
-              message: 'building...'
+            featuredeploy(['deploy', pull_request.head.ref, pull_request.head.sha], (ip) => {
+              integrationTools.makeGithubFeatureDeployComments({
+                installationId: installation.id,
+                pullUrl: pull_request.url,
+                message: 'building http://' + ip + ' ...'
+              })
             })
-            featuredeploy(['deploy', pull_request.head.ref, pull_request.head.sha], () => false)
           }
           break
         case 'unlabeled':
