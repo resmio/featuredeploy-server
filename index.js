@@ -25,9 +25,8 @@ const featuredeploy = (args, callback) => {
 }
 
 app.post('/pull_request', (req, res) => {
-  if (req.query.secret === SECRET){
+  if (req.query.secret === SECRET) {
     const {action, pull_request, label, repository, installation, sender} = req.body
-    console.log(req.body)
     const nonBotSender = sender && sender.type && sender.type !== 'Bot'
     if (installation && installation.id && action && pull_request) {
       switch (action) {
@@ -73,18 +72,23 @@ app.post('/pull_request', (req, res) => {
 })
 
 app.post('/error', (req, res) => {
-  const {full_name: fullName, branch: branchName, installation_id: installationId, ip} = req.body
-  integrationTools.makeGithubFeatureDeployComments({
-    installationId,
-    branchName,
-    fullName,
-    message: 'error happened... check it out here http://' + ip
-  })
-  res.sendStatus(200)
+  if (req.query.secret === SECRET) {
+    const {full_name: fullName, branch: branchName, installation_id: installationId, ip} = req.body
+    integrationTools.makeGithubFeatureDeployComments({
+      installationId,
+      branchName,
+      fullName,
+      message: 'error happened... check it out here http://' + ip,
+      errorGiphy: true
+    })
+    res.sendStatus(200)
+  } else {
+    res.sendStatus(403)
+  }
 })
 
 app.post('/destroy', (req, res) => {
-  if (req.query.secret === SECRET){
+  if (req.query.secret === SECRET) {
     const {full_name: fullName, branch: branchName, installation_id: installationId} = req.body
     integrationTools.removeGithubFeatureDeployComments({
       installationId,
@@ -98,7 +102,7 @@ app.post('/destroy', (req, res) => {
 })
 
 app.post('/deployed', (req, res) => {
-  if (req.query.secret === SECRET){
+  if (req.query.secret === SECRET) {
     const {full_name: fullName, branch: branchName, installation_id: installationId, ip, hash} = req.body
     integrationTools.makeGithubFeatureDeployComments({
       installationId,
