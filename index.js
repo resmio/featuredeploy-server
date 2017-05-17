@@ -1,6 +1,7 @@
 var PORT = process.env.PORT || 3000
 var GITHUB_LABEL_NAME = process.env.GITHUB_LABEL_NAME
 var SECRET = process.env.SECRET
+var SECRET = process.env.CONFIG_FILES || '/app/vendor/deploy/resmio'
 
 var app = require('express')()
 var bodyParser = require('body-parser')
@@ -14,7 +15,7 @@ var integrationTools = require('./lib/integrationTools')
 const execFile = require('child_process').execFile;
 // call the featuredeploy script and passes the last stdout line as argument
 const featuredeploy = (args, callback) => {
-  execFile('featuredeploy', args, (error, stdout, stderr) => {
+  execFile('featuredeploy', args, {cwd: CONFIG_FILES}, (error, stdout, stderr) => {
     if (error) { console.error(error) }
     else {
       stdout = stdout.trim()
