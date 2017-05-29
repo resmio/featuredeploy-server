@@ -1,7 +1,7 @@
 var PORT = process.env.PORT || 3000
 var GITHUB_LABEL_NAME = process.env.GITHUB_LABEL_NAME
 var SECRET = process.env.SECRET
-var SECRET = process.env.CONFIG_FILES || '/app/vendor/deploy/resmio'
+var CONFIG_FILES = process.env.CONFIG_FILES || '/app/vendor/deploy/resmio'
 
 var app = require('express')()
 var bodyParser = require('body-parser')
