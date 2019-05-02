@@ -1,5 +1,5 @@
 {
-  "name": "sombrero",
+  "name": "featuredeploy-server",
   "version": "1.0.0",
   "description": "Github integration for featuredeploy",
   "main": "index.js",
@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/resmio/sombrero.git"
+    "url": "git+https://github.com/resmio/featuredeploy-server.git"
   },
   "author": "",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/resmio/sombrero/issues"
+    "url": "https://github.com/resmio/featuredeploy-server/issues"
   },
-  "homepage": "https://github.com/resmio/sombrero#readme",
+  "homepage": "https://github.com/resmio/featuredeploy-server#readme",
   "engines": {
     "node": "6.9.4"
   },
