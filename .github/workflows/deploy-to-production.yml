@@ -39,3 +39,7 @@ jobs:
           git push https://git.heroku.com/featuredeploy.git `git rev-parse --short HEAD`:refs/heads/master -f
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+
+      - name: ls -l
+        run: ls -l
+  
