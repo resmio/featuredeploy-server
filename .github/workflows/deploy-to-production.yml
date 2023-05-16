@@ -11,7 +11,10 @@ jobs:
       - uses: actions/checkout@v1
         with:
           ref: deploy-to-production
-      run: ls -l
+      
+      - name: ls -l
+        run: ls -l
+      
       - name: Install Heroku Cli
         run: |
           curl https://cli-assets.heroku.com/install-standalone.sh | sh
