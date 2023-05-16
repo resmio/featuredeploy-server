@@ -30,6 +30,10 @@ jobs:
           echo $HEROKU_NETRC >> ~/.netrc
         env:
           HEROKU_NETRC: ${{ secrets.HEROKU_NETRC }}
+
+      - name: ls -l
+        run: ls -l
+
       - name: Deploy to Heroku
         run: |
           git push https://git.heroku.com/featuredeploy.git `git rev-parse --short HEAD`:refs/heads/master -f
