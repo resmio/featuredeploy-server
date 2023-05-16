@@ -3,6 +3,8 @@ var GITHUB_LABEL_NAME = process.env.GITHUB_LABEL_NAME
 var SECRET = process.env.SECRET
 var CONFIG_FILES = process.env.CONFIG_FILES || '/app/vendor/deploy/resmio'
 
+console.log(process.env)
+
 var app = require('express')()
 var bodyParser = require('body-parser')
 app.use(bodyParser.json())
@@ -28,12 +30,6 @@ const featuredeploy = (args, callback) => {
 app.post('/pull_request', (req, res) => {
   if (req.query.secret === SECRET) { // in other endpoint we use POST for the secret
     const {action, pull_request, label, repository, installation, sender} = req.body
-    console.log(action)
-    console.log(pull_request)
-    console.log(label)
-    console.log(repository)
-    console.log(installation)
-    console.log(sender)
     const nonBotSender = sender && sender.type && sender.type !== 'Bot'
     if (installation && installation.id && action && pull_request) {
       switch (action) {
