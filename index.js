@@ -3,8 +3,6 @@ var GITHUB_LABEL_NAME = process.env.GITHUB_LABEL_NAME
 var SECRET = process.env.SECRET
 var CONFIG_FILES = process.env.CONFIG_FILES || '/app/vendor/deploy/resmio'
 
-console.log(process.env)
-
 var app = require('express')()
 var bodyParser = require('body-parser')
 app.use(bodyParser.json())
