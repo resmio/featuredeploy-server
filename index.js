@@ -80,7 +80,6 @@ app.post('/error', (req, res) => {
       branchName,
       fullName,
       message: 'error happened... check it out here http://' + ip,
-      errorGiphy: true
     })
     res.sendStatus(200)
   } else {
@@ -110,7 +109,6 @@ app.post('/deployed', (req, res) => {
       branchName,
       fullName,
       message: 'deployed to http://' + ip + ' ' + hash,
-      giphy: true
     })
   res.sendStatus(200)
   } else {
